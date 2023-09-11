@@ -21,13 +21,17 @@ class Tokenizer:
             return self.char_decoding(encoding)
         elif tokenizer_type == "bpe":
             return self.bpe_decoding(encoding)
+            
     def char_encoding(self, text: str):
         return np.array([ord(c) for c in text])
+        
     def char_decoding(self, encoding: np.array):
         return "".join([chr(c) for c in encoding])
+        
     def bpe_encoding(self, text: str):
         tz = tiktoken.get_encoding("clk100-base")
         return np.array(tz.encode(text))
+        
     def bpe_decoding(self, encoding: np.array):
         tz = tiktoken.get_encoding("clk100-base")
         self.bpe_tokens = tz.decode_tokens_bytes(list(encoding))
