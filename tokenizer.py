@@ -1,5 +1,6 @@
 import numpy as np
 import tiktoken
+
 class Tokenizer:
     def __init__(self, tokenizer_type: str):
         self.tokenizer_type = tokenizer_type
