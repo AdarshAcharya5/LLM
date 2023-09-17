@@ -11,16 +11,16 @@ class Tokenizer:
         self.vocab_size = len(self.char_set)
         self.bpe_tokens = set()
 
-    def encode(self, tokenizer_type: str, text: str):
-        if tokenizer_type == "char":
+    def encode(self, text: str):
+        if self.tokenizer_type == "char":
             return self.char_encoding(text)
-        elif tokenizer_type == "bpe":
+        elif self.tokenizer_type == "bpe":
             return self.bpe_encoding(text)
 
-    def decode(self, tokenizer_type: str, encoding: torch.tensor):
-        if tokenizer_type == "char":
+    def decode(self, encoding: torch.tensor):
+        if self.tokenizer_type == "char":
             return self.char_decoding(encoding)
-        elif tokenizer_type == "bpe":
+        elif self.tokenizer_type == "bpe":
             return self.bpe_decoding(encoding)
             
     def char_encoding(self, text: str):
