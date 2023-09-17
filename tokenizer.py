@@ -1,4 +1,4 @@
-import numpy as np
+import torch
 import tiktoken
 
 class Tokenizer:
@@ -17,23 +17,23 @@ class Tokenizer:
         elif tokenizer_type == "bpe":
             return self.bpe_encoding(text)
 
-    def decode(self, tokenizer_type: str, encoding: np.array):
+    def decode(self, tokenizer_type: str, encoding: torch.tensor):
         if tokenizer_type == "char":
             return self.char_decoding(encoding)
         elif tokenizer_type == "bpe":
             return self.bpe_decoding(encoding)
             
     def char_encoding(self, text: str):
-        return np.array([ord(c) for c in text])
-        
-    def char_decoding(self, encoding: np.array):
+        return torch.tensor([ord(c) for c in text])
+    
+    def char_decoding(self, encoding: torch.tensor):
         return "".join([chr(c) for c in encoding])
         
     def bpe_encoding(self, text: str):
         tz = tiktoken.get_encoding("clk100-base")
-        return np.array(tz.encode(text))
-        
-    def bpe_decoding(self, encoding: np.array):
+        return torch.tensor(tz.encode(text))
+      
+    def bpe_decoding(self, encoding: torch.tensor):
         tz = tiktoken.get_encoding("clk100-base")
         self.bpe_tokens = tz.decode_tokens_bytes(list(encoding))
         return tz.decode(list(encoding))
