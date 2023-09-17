@@ -6,7 +6,7 @@ class Tokenizer:
         self.tokenizer_type = tokenizer_type
         if self.tokenizer_type != "char" or self.tokenizer_type != "bpe":
             assert self.tokenizer_type == "char" or self.tokenizer_type == "bpe", 'Tokenizer type must be "char" or "bpe"'
-            raise ValueError("Invalid Tokenizer type")
+            #raise ValueError("Invalid Tokenizer type")
         self.char_set = set(chr(i) for i in range(32, 127))
         self.vocab_size = len(self.char_set)
         self.bpe_tokens = set()
@@ -30,11 +30,11 @@ class Tokenizer:
         return "".join([chr(c) for c in encoding])
         
     def bpe_encoding(self, text: str):
-        tz = tiktoken.get_encoding("clk100-base")
+        tz = tiktoken.get_encoding("cl100k_base")
         return torch.tensor(tz.encode(text))
       
     def bpe_decoding(self, encoding: torch.tensor):
-        tz = tiktoken.get_encoding("clk100-base")
+        tz = tiktoken.get_encoding("cl100k_base")
         self.bpe_tokens = tz.decode_tokens_bytes(list(encoding))
         return tz.decode(list(encoding))
 
