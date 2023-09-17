@@ -1,5 +1,6 @@
 import torch
 import tiktoken
+
 class Tokenizer:
     def __init__(self, tokenizer_type: str):
         self.tokenizer_type = tokenizer_type
@@ -21,13 +22,17 @@ class Tokenizer:
             return self.char_decoding(encoding)
         elif tokenizer_type == "bpe":
             return self.bpe_decoding(encoding)
+            
     def char_encoding(self, text: str):
         return torch.tensor([ord(c) for c in text])
+    
     def char_decoding(self, encoding: torch.tensor):
         return "".join([chr(c) for c in encoding])
+        
     def bpe_encoding(self, text: str):
         tz = tiktoken.get_encoding("clk100-base")
         return torch.tensor(tz.encode(text))
+      
     def bpe_decoding(self, encoding: torch.tensor):
         tz = tiktoken.get_encoding("clk100-base")
         self.bpe_tokens = tz.decode_tokens_bytes(list(encoding))
