@@ -1,0 +1,10 @@
+{
+  "seq_length": 16,
+  "batch_size": 32,
+  "num_layers": 6,
+  "num_heads": 8,
+  "embed_size": 384,
+  "epochs": 1000,
+  "dropout": 0.2,
+  "learning_rate": 0.001
+}
