@@ -1,6 +1,6 @@
 import torch.nn as nn
-from FeedForward import feedforward
-from MultiHeadAttention import MultiHeadAttention
+from feedforward import FeedForward
+from multiheadattention import MultiHeadAttention
 
 class decoder_block(nn.Module):
 
@@ -11,7 +11,7 @@ class decoder_block(nn.Module):
         self.seq_length = seq_length
         self.head_size = self.embed_size // self.num_heads
         self.self_attention = MultiHeadAttention(self.num_heads, self.head_size, self.embed_size, self.seq_length)
-        self.ffn = feedforward(self.embed_size)
+        self.ffn = FeedForward(self.embed_size)
         self.layer_norm1 = nn.LayerNorm(self.embed_size)
         self.layer_norm2 = nn.LayerNorm(self.embed_size)
 

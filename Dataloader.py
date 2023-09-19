@@ -1,7 +1,7 @@
 import os
 class Dataloader:
 
-    def __init__(self, input_file : str, output_file : None, source_directory=None):
+    def __init__(self, input_file : str, output_file=None, source_directory=None):
         self.source_directory = source_directory
         self.input_file = input_file
         self.output_file = output_file
@@ -44,5 +44,3 @@ class Dataloader:
                 if ord(ch) < 32 or ord(ch) > 126:
                     lines[i] = lines[i].replace(ch, replace_char)
         return '\n'.join(lines)
-
-

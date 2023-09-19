@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from Decoder import decoder_block
+from decoder import decoder_block
 
 class GPT(nn.Module):
     def __init__(self, vocab_size, seq_length, embed_size, num_layers, num_heads):

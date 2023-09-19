@@ -1,6 +1,6 @@
 import torch.nn as nn
 
-class feedforward(nn.Module):
+class FeedForward(nn.Module):
 
     def __init__(self, embed_size, dropout_=0.2):
         super().__init__()

@@ -38,7 +38,7 @@ class Tokenizer:
         return tz.decode(list(encoding))
 
     def show_bpe_tokens(self):
-        assert len(self.bpe_tokens) is not 0, \
+        assert len(self.bpe_tokens) != 0, \
             "No BPE tokens found. You have either not encoded any text or you have not used the BPE tokenizer."
 
     def __str__(self):
