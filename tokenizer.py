@@ -6,8 +6,8 @@ class Tokenizer:
         self.tokenizer_type = tokenizer_type
         if self.tokenizer_type != "char" or self.tokenizer_type != "bpe":
             assert self.tokenizer_type == "char" or self.tokenizer_type == "bpe", 'Tokenizer type must be "char" or "bpe"'
-        self.char_set = set(chr(i) for i in range(32, 127))
-        self.vocab_size = len(self.char_set)
+        self.vocab_size = 96 if self.tokenizer_type == "char" else 100277
+        self.unk_token = 95
         self.bpe_tokens = set()
 
     def encode(self, text: str):
@@ -23,14 +23,14 @@ class Tokenizer:
             return self.bpe_decoding(encoding)
             
     def char_encoding(self, text: str):
-        return torch.tensor([ord(c) for c in text])
+        return torch.tensor([(ord(c)-32 if ord(c) in range(32,127) else self.unk_token) for c in text], dtype=torch.long)
     
     def char_decoding(self, encoding: torch.tensor):
-        return "".join([chr(c) for c in encoding])
+        return "".join([chr(int(c)+32 if c!=self.unk_token else 10) for c in encoding])
         
     def bpe_encoding(self, text: str):
         tz = tiktoken.get_encoding("cl100k_base")
-        return torch.tensor(tz.encode(text))
+        return torch.tensor(tz.encode(text), dtype=torch.long)
       
     def bpe_decoding(self, encoding: torch.tensor):
         tz = tiktoken.get_encoding("cl100k_base")
@@ -38,11 +38,11 @@ class Tokenizer:
         return tz.decode(list(encoding))
 
     def show_bpe_tokens(self):
-        print(self.bpe_tokens) if self.bpe_tokens else \
-            print("No BPE tokens found. You have either not encoded any text or you have not used the BPE tokenizer.")
+        assert len(self.bpe_tokens) is not 0, \
+            "No BPE tokens found. You have either not encoded any text or you have not used the BPE tokenizer."
 
     def __str__(self):
         if self.tokenizer_type == "char":
             return f"Tokenizer type: {self.tokenizer_type}: Character Level Tokenizer"
         elif self.tokenizer_type == "bpe":
-            return f"Tokenizer type: {self.tokenizer_type}: Byte Pair Encoding Tokenizer"
+            return f"Tokenizer type: {self.tokenizer_type}: Byte Pair Encoding Tokenizer (SubWord)"
