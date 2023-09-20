@@ -1,6 +1,9 @@
 import torch
 import tiktoken
 
+''' Currently only supports chararcter level ascii tokenizer and openAI's byte pair encoding (BPE) 
+tokenizer tiktoken that encodes sequences at sub-word level.'''
+
 class Tokenizer:
     def __init__(self, tokenizer_type: str):
         self.tokenizer_type = tokenizer_type

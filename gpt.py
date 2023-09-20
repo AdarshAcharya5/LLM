@@ -15,11 +15,13 @@ class GPT(nn.Module):
         self.num_heads = num_heads
         self.embedding = nn.Embedding(self.vocab_size, self.embed_size)
         self.positional_embedding = nn.Embedding(self.seq_length, self.embed_size)
-        self.decoder_blocks = nn.Sequential(*[decoder_block(self.embed_size, self.num_heads, self.seq_length) for _ in range(self.num_layers)])
+        self.decoder_blocks = nn.Sequential(*[decoder_block(self.embed_size, self.num_heads, self.seq_length) \
+                                              for _ in range(self.num_layers)])
         self.layer_norm = nn.LayerNorm(self.embed_size)
         self.linear = nn.Linear(self.embed_size, self.vocab_size)
         self.apply(self.init__weights)
 
+    # Initialize weights with values drawn from Gaussian Distribution
     def init__weights(self, module):
         if isinstance(module, nn.Linear):
             nn.init.normal_(module.weight, std=0.02)
@@ -46,6 +48,7 @@ class GPT(nn.Module):
             loss = F.cross_entropy(logits, targets)
         return logits, loss
 
+    # Sample examples from the model
     def sample(self, context, max_tokens=500, k=5):
         for _ in range(max_tokens):
             context = context[:, -self.seq_length:]
