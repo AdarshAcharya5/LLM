@@ -33,7 +33,6 @@ class GPT(nn.Module):
         batch_size, seq_length = context.shape
         emb = self.embedding(context)
         pos_emb = self.positional_embedding(torch.arange(seq_length, device=self.device))
-        print(emb.shape, pos_emb.shape)
         x = emb + pos_emb
         x = self.decoder_blocks(x)
         x = self.layer_norm(x)
@@ -54,6 +53,6 @@ class GPT(nn.Module):
             logits = logits[:, -1, :]
             probs = F.softmax(logits, dim=-1)
             topk_tokens = (torch.topk(probs, k=k, dim=-1)[1]).squeeze(0)
-            next_token = torch.tensor(random.choice(topk_tokens.tolist())).reshape(1, 1)
+            next_token = random.choice(topk_tokens).reshape(1,1)
             context = torch.cat((context, next_token), dim=1)
         return context
