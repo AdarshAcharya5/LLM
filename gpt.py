@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from decoder import decoder_block
+import random
 
 class GPT(nn.Module):
     def __init__(self, vocab_size, seq_length, embed_size, num_layers, num_heads):
@@ -29,8 +30,10 @@ class GPT(nn.Module):
 
 
     def forward(self, context, targets=None):
+        batch_size, seq_length = context.shape
         emb = self.embedding(context)
-        pos_emb = self.positional_embedding(torch.arange(self.seq_length, device=self.device))
+        pos_emb = self.positional_embedding(torch.arange(seq_length, device=self.device))
+        print(emb.shape, pos_emb.shape)
         x = emb + pos_emb
         x = self.decoder_blocks(x)
         x = self.layer_norm(x)
@@ -44,11 +47,13 @@ class GPT(nn.Module):
             loss = F.cross_entropy(logits, targets)
         return logits, loss
 
-    def sample(self, context, max_tokens = 500):
+    def sample(self, context, max_tokens=500, k=5):
         for _ in range(max_tokens):
+            context = context[:, -self.seq_length:]
             logits, loss = self.forward(context)
             logits = logits[:, -1, :]
             probs = F.softmax(logits, dim=-1)
-            next_token = torch.multinomial(probs, num_samples=1)
-            context = torch.cat([context, next_token], dim=-1)
+            topk_tokens = (torch.topk(probs, k=k, dim=-1)[1]).squeeze(0)
+            next_token = torch.tensor(random.choice(topk_tokens.tolist())).reshape(1, 1)
+            context = torch.cat((context, next_token), dim=1)
         return context

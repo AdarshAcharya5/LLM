@@ -1,4 +1,7 @@
 import os
+import torch
+from tokenizer import Tokenizer
+
 class Dataloader:
 
     def __init__(self, input_file : str, output_file=None, source_directory=None):
@@ -35,6 +38,17 @@ class Dataloader:
                     merged_file.write(file_content)
                     merged_file.write(delimiter)
         return self.extract(output_file)
+
+    def get_train_val_split(self, data: torch.tensor, tokenizer_type, split_ratio=0.9):
+        assert tokenizer_type == "char" or tokenizer_type == "bpe", 'Tokenizer type must be "char" or "bpe"'
+        tokenizer = Tokenizer(tokenizer_type)
+        n = int(split_ratio * len(data))
+        train_data, val_data = data[:n], data[n:]
+        with open("train_data.txt", "w", encoding="utf-8") as train_file:
+            train_file.write(tokenizer.decode(train_data))
+        with open("val_data.txt", "w", encoding="utf-8") as val_file:
+            val_file.write(tokenizer.decode(val_data))
+        return train_data, val_data
 
     # Removes invalid characters from file content
     def remove_invalid_chars(self, file_content : str, replace_char=' '):

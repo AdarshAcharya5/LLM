@@ -73,9 +73,12 @@ class Model:
             loss.backward()
             optimizer.step()
 
-    def sample(self, context: str, max_tokens=500):
-        context = self.tokenizer.encode(context)
-        context = context.unsqueeze(0).to(self.device)
+    def sample(self, context: str, max_tokens=50, load_model=True, load_path="LLM.pth.tar"):
+        if load_model:
+            optimizer = optim.Adam(self.model.parameters(), lr=self.config["learning_rate"])
+            self.load_checkpoint(optimizer, torch.load(load_path))
+        context = self.tokenizer.encode(context).to(self.device)
+        context = context.unsqueeze(0)
         generated_seq = self.tokenizer.decode(self.model.sample(context, max_tokens)[0])
         return generated_seq
 
