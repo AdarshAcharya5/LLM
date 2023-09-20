@@ -1,5 +1,6 @@
 # LLM
-A Not-So-Large-Yet Language Model
+A Not-So-Large-Yet Language Model.
+
 This is a decoder-only generative transformer written from scratch
 
 To run : 
