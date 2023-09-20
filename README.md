@@ -1,4 +1,5 @@
 # LLM
+A Not-So-Large-Yet Language Model
 To run : 
 1. Make a gpu enabled env/venv.
 2. Clone this repo
