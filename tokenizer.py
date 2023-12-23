@@ -3,7 +3,7 @@ import tiktoken
 
 ''' Currently only supports chararcter level ascii tokenizer and openAI's byte pair encoding (BPE) 
 tokenizer tiktoken that encodes sequences at sub-word level.
-NOTE : Change the vocab size if using custom input dataset (Not poems.txt), if using tiktoken'''
+NOTE : Change the vocab size if using custom input dataset that involves language other than English, if using tiktoken'''
 
 class Tokenizer:
     def __init__(self, tokenizer_type: str):
