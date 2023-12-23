@@ -44,6 +44,7 @@ class Tokenizer:
     def show_bpe_tokens(self):
         assert len(self.bpe_tokens) != 0, \
             "No BPE tokens found. You have either not encoded any text or you have not used the BPE tokenizer."
+        print(self.bpe_tokens)
 
     def __str__(self):
         if self.tokenizer_type == "char":
